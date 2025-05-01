@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  gateway:
+    build: ./gateway
+    ports:
+      - "3000:3000"
+    depends_on:
+      - auth
+      - booking
+
+  auth:
+    build: ./services/auth
+    ports:
+      - "3001:3000"
+
+  booking:
+    build: ./services/booking
+    ports:
+      - "3002:3000"
+
+  postgres:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER=admin
+      POSTGRES_PASSWORD=admin
+      POSTGRES_DB=portal
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
